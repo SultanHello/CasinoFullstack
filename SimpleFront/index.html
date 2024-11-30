@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Hub</title>
+    <style>
+        #auth h1 {
+            font-size: 2rem;
+            color: #ffdd00;
+            text-shadow: 2px 2px 4px #000;
+            margin-bottom: 20px;
+        }
+        #auth h3 {
+            font-size: 1.2rem;
+            margin: 10px 0;
+            color: #fff;
+        }
+        input{
+            color: gray;
+            background: linear-gradient(45deg, #2f2d2d, #484242);
+
+
+        }
+
+        #auth button {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            font-size: 1rem;
+        }
+
+        #auth span {
+            font-weight: bold;
+            color: #32cd32;
+            text-shadow: 1px 1px 2px #000;
+        }
+        #auth {
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+            padding: 20px 40px;
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+
+        /* Общий стиль */
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background: radial-gradient(circle at center, #2a2a72, #009ffd);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Игровая зона */
+        #gameArea {
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+            padding: 20px 40px;
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        #gameArea h1 {
+            font-size: 2rem;
+            color: #ffdd00;
+            text-shadow: 2px 2px 4px #000;
+            margin-bottom: 20px;
+        }
+
+        #gameArea h3 {
+            font-size: 1.2rem;
+            margin: 10px 0;
+            color: #fff;
+        }
+
+        #gameArea span {
+            font-weight: bold;
+            color: #32cd32;
+            text-shadow: 1px 1px 2px #000;
+        }
+
+        /* Кнопки */
+        #gameArea button {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            font-size: 1rem;
+        }
+
+        #gameArea button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(255, 75, 43, 0.8);
+        }
+
+        #gameArea button#logout {
+            background: linear-gradient(45deg, #1f4037, #99f2c8);
+        }
+
+        #gameArea button#logout:hover {
+            box-shadow: 0 0 10px rgba(153, 242, 200, 0.8);
+        }
+
+        /* Уведомления */
+        #notificationsList {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+            text-align: left;
+            max-height: 150px;
+            overflow-y: auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        #notificationsList li {
+            padding: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
+        #notificationsList li:last-child {
+            border-bottom: none;
+        }
+
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f4f4f4; }
+        #auth, #gameArea { display: none; padding: 20px; }
+        button { margin: 10px 0; padding: 10px; background: #007BFF; color: white; border: none; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+<div id="auth">
+    <h1>Добро пожаловать</h1>
+    <form id="loginForm" class="hidden">
+        <h2>Вход</h2>
+        <input type="email" id="loginEmail" placeholder="Введите email" required><br>
+        <input type="password" id="loginPassword" placeholder="Введите пароль" required><br>
+        <button type="submit">Войти</button>
+    </form>
+    <form id="registerForm">
+        <h2>Регистрация</h2>
+        <input type="email" id="registerEmail" placeholder="Введите email" required><br>
+        <input type="password" id="registerPassword" placeholder="Введите пароль" required><br>
+        <input type="number" id="registerAge" placeholder="Введите возраст" required><br>
+        <input type="number" id="registerCoin" placeholder="Количество монет" required><br>
+        <button type="submit">Зарегистрироваться</button>
+    </form>
+    <button id="toggleLogin">Переключиться</button>
+</div>
+
+
+<div id="gameArea">
+    <h1>Игровая зона</h1>
+    <div>
+        <h3>Баланс: <span id="userCoins">0</span> монет</h3>
+        <h3>Email: <span id="userEmail"></span></h3>
+    </div>
+    <form id="gameForm">
+        <label for="coinAmount">Введите количество монет для игры:</label>
+        <input type="number" id="coinAmount" name="coinAmount" min="1" required>
+
+    </form>
+    <button id="playCasino">Играть в Казино</button>
+    <button id="playBukmaker">Играть в Букмекера</button>
+    <button id="playAllGames">Играть во все игры</button>
+    <button id="getNotifications">Уведомления</button>
+    <button id="logout">Выйти</button>
+    <ul id="notificationsList"></ul>
+</div>
+
+<script>
+    const API_URL = 'http://localhost:8080/users';
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            showGameArea();
+            updateUserInfo();
+        } else {
+            showAuthForm();
+        }
+
+        // Переключение между входом и регистрацией
+        document.getElementById('toggleLogin').addEventListener('click', toggleForms);
+
+        // Регистрация
+        document.getElementById('registerForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const email = document.getElementById('registerEmail').value.trim();
+            const password = document.getElementById('registerPassword').value.trim();
+            const age = document.getElementById('registerAge').value;
+            const coin = document.getElementById('registerCoin').value;
+
+            const response = await fetch(`${API_URL}/register`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password, age, coin })
+            });
+            if (response.ok) {
+                alert('Регистрация успешна!');
+                toggleForms();
+            } else {
+                alert('Ошибка регистрации!');
+            }
+        });
+
+        // Логин
+        document.getElementById('loginForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+
+            const response = await fetch(`${API_URL}/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+            if (response.ok) {
+                const token = await response.text();
+                localStorage.setItem('token', token);
+                showGameArea();
+                updateUserInfo();
+            } else {
+                alert('Ошибка входа!');
+            }
+        });
+
+        // Игровые действия
+        document.getElementById('playCasino').addEventListener('click', () => playGame('playCasino'));
+        document.getElementById('playBukmaker').addEventListener('click', () => playGame('playBukmaker'));
+        document.getElementById('playAllGames').addEventListener('click', () => playGame('playAllgames'));
+
+        // Получить уведомления
+        document.getElementById('getNotifications').addEventListener('click', async () => {
+            const response = await fetch(`${API_URL}/notifications`, getAuthHeaders());
+            if (response.ok) {
+                const notifications = await response.json();
+                const list = document.getElementById('notificationsList');
+                list.innerHTML = notifications.map(n => `<li>${n}</li>`).join('');
+            } else {
+                alert('Ошибка получения уведомлений!');
+            }
+        });
+
+        // Выйти
+        document.getElementById('logout').addEventListener('click', () => {
+            localStorage.removeItem('token');
+            showAuthForm();
+        });
+    });
+
+    function toggleForms() {
+        const registerForm = document.getElementById('registerForm');
+        const loginForm = document.getElementById('loginForm');
+        if (registerForm.classList.contains('hidden')) {
+            registerForm.classList.remove('hidden');
+            loginForm.classList.add('hidden');
+        } else {
+            registerForm.classList.add('hidden');
+            loginForm.classList.remove('hidden');
+        }
+    }
+
+    function showAuthForm() {
+        document.getElementById('auth').style.display = 'block';
+        document.getElementById('gameArea').style.display = 'none';
+    }
+
+    function showGameArea() {
+        document.getElementById('auth').style.display = 'none';
+        document.getElementById('gameArea').style.display = 'block';
+    }
+
+    function getAuthHeaders() {
+        const token = localStorage.getItem('token');
+        return {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        };
+    }
+
+    async function updateUserInfo() {
+        const emailResponse = await fetch(`${API_URL}/getEmail`, getAuthHeaders());
+        const coinsResponse = await fetch(`${API_URL}/getCoins`, getAuthHeaders());
+        if (emailResponse.ok && coinsResponse.ok) {
+            document.getElementById('userEmail').textContent = await emailResponse.text();
+            document.getElementById('userCoins').textContent = await coinsResponse.text();
+        }
+    }
+
+    // Функция для игры
+    async function playGame(endpoint) {
+        // Получаем значение из формы
+        const coinInput = document.getElementById('coinAmount');
+        const coin = coinInput.value;
+
+        // Проверяем, чтобы введенное значение было корректным числом
+        if (!coin || isNaN(coin) || coin <= 0) {
+            alert('Введите корректное количество монет!');
+            return;
+        }
+
+        try {
+            // Выполним запрос с использованием fetch
+            const response = await fetch(`${API_URL}/${endpoint}`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(parseInt(coin))
+            });
+
+            // Проверка на успешный ответ
+            if (!response.ok) {
+                throw new Error('Ошибка игры!');
+            }
+
+            // Если запрос прошел успешно
+            const result = await response.text();
+            alert(result);
+            updateUserInfo(); // Обновим информацию о пользователе
+        } catch (error) {
+            // Обработка ошибки
+            alert(error.message);
+        }
+    }
+
+    // Обработчик отправки формы
+    // document.getElementById('gameForm').addEventListener('submit', function(event) {
+    //     event.preventDefault(); // Предотвращаем стандартное поведение формы
+    //     const endpoint = 'playCasino'; // Укажите нужный эндпоинт
+    //     playGame(endpoint); // Запуск игры
+    // });
+
+</script>
+</body>
+</html>
+
